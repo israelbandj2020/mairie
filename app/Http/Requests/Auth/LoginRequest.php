@@ -50,6 +50,19 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        $user = Auth::user();
+
+        if (!$user->estValide()) {
+            Auth::logout();
+            RateLimiter::hit($this->throttleKey());
+
+            throw ValidationException::withMessages([
+                'email' => $user->statut === 'en_attente'
+                    ? 'Votre compte est en attente de validation.'
+                    : 'Votre compte a été suspendu.',
+            ]);
+        }
+
         RateLimiter::clear($this->throttleKey());
     }
 

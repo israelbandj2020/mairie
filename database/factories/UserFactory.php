@@ -24,12 +24,20 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $nomComplet = fake()->name();
+        $parts = explode(' ', $nomComplet);
+        $prenom = $parts[0];
+        $nom = count($parts) > 1 ? implode(' ', array_slice($parts, 1)) : '';
+
         return [
-            'name' => fake()->name(),
+            'nom' => $nom,
+            'prenom' => $prenom,
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'role' => 'conseiller',
+            'statut' => 'valide',
         ];
     }
 
