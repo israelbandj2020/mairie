@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tableau de bord – Administrateur</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --forest:#0e3b30;
+  --forest-2:#164d3f;
+  --forest-line:rgba(255,255,255,.12);
+  --paper:#eef1f0;
+  --card:#ffffff;
+  --ink:#16231e;
+  --muted:#5b6b64;
+  --line:#d9e0dd;
+  --laterite:#b4452b;
+  --laterite-soft:#f6e3dc;
+  --sun:#d9a441;
+  --ok:#1f7a55;
+  --ok-soft:#dcf0e6;
+  --radius:14px;
+  --head:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);line-height:1.55;font-size:15px}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:3px solid var(--sun);outline-offset:2px;border-radius:6px}
+svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* ---------- structure ---------- */
+.app{display:grid;grid-template-columns:272px 1fr;min-height:100vh}
+.side{background:var(--forest);color:#e9f1ee;padding:28px 18px 20px;display:flex;flex-direction:column;gap:28px;position:sticky;top:0;height:100vh}
+.brand{display:flex;gap:12px;align-items:center;padding:0 10px}
+.brand-mark{width:42px;height:42px;border-radius:11px;background:var(--sun);color:var(--forest);display:grid;place-items:center}
+.brand-mark svg{width:24px;height:24px;stroke-width:2}
+.brand b{font-family:var(--head);font-size:17px;line-height:1.15;display:block}
+.brand span{font-size:12.5px;color:#a9c3ba}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav a{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;color:#cfe0da;font-weight:500}
+.nav a:hover{background:var(--forest-2);color:#fff}
+.nav a[aria-current="page"]{background:#fff;color:var(--forest)}
+.nav .sep{height:1px;background:var(--forest-line);margin:10px 8px}
+.me{margin-top:auto;border-top:1px solid var(--forest-line);padding:16px 10px 0;display:flex;gap:12px;align-items:center}
+.avatar{width:40px;height:40px;border-radius:50%;background:var(--forest-2);border:1px solid var(--forest-line);display:grid;place-items:center;font-family:var(--head);font-weight:700;color:var(--sun)}
+.me b{display:block;font-size:14px;line-height:1.2}
+.me small{color:#a9c3ba;font-size:12.5px}
+
+.main{padding:0 40px 56px;min-width:0}
+.top{display:flex;align-items:center;gap:16px;padding:22px 0}
+.burger{display:none;width:42px;height:42px;border-radius:10px;background:var(--card);border:1px solid var(--line);place-items:center}
+.search{flex:1;min-width:0;max-width:520px;display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:0 14px;height:44px;color:var(--muted)}
+.search input{flex:1;width:100%;border:0;outline:0;background:none;font:inherit;color:var(--ink);min-width:0}
+.search:focus-within{border-color:var(--forest-2);box-shadow:0 0 0 3px rgba(22,77,63,.15)}
+.top .grow{flex:1}
+.icon-btn{width:44px;height:44px;border-radius:12px;background:var(--card);border:1px solid var(--line);display:grid;place-items:center;position:relative}
+.icon-btn .dot{position:absolute;top:10px;right:11px;width:9px;height:9px;border-radius:50%;background:var(--laterite);border:2px solid var(--card)}
+
+/* ---------- accueil ---------- */
+.hello{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin:6px 0 24px}
+.hello h1{font-family:var(--head);font-weight:700;font-size:clamp(28px,3.4vw,40px);line-height:1.1;letter-spacing:-.02em}
+.hello p{color:var(--muted);margin-top:6px}
+.btn{display:inline-flex;align-items:center;gap:10px;height:44px;padding:0 18px;border-radius:12px;font-weight:600;background:var(--forest);color:#fff}
+.btn:hover{background:var(--forest-2)}
+.btn small{font-weight:500;font-size:11.5px;background:rgba(255,255,255,.16);padding:2px 8px;border-radius:99px}
+
+.stage{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:20px;margin-bottom:20px}
+.next{position:relative;background:var(--forest);color:#fff;border-radius:20px;padding:34px 36px;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;min-height:340px}
+.next::after{content:"";position:absolute;right:-70px;top:-70px;width:300px;height:300px;border-radius:50%;border:1px solid var(--forest-line);box-shadow:0 0 0 38px rgba(255,255,255,.03),0 0 0 76px rgba(255,255,255,.025)}
+.next-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);padding:6px 12px;border-radius:99px;font-size:13px;width:max-content;position:relative;z-index:1}
+.next-tag i{width:8px;height:8px;border-radius:50%;background:var(--sun)}
+.numero{font-family:var(--head);font-weight:700;font-size:clamp(56px,7vw,104px);line-height:.9;letter-spacing:-.04em;margin:26px 0 12px;position:relative;z-index:1}
+.numero span{font-size:.38em;letter-spacing:0;color:#a9c3ba;font-weight:500;margin-right:.35em;vertical-align:.9em}
+.numero em{font-style:normal;color:var(--sun)}
+.next h2{font-family:var(--head);font-weight:500;font-size:22px;line-height:1.25;max-width:30ch;position:relative;z-index:1}
+.next-foot{display:flex;flex-wrap:wrap;gap:12px 28px;margin-top:26px;position:relative;z-index:1;color:#cfe0da;font-size:14px}
+.next-foot div{display:flex;gap:9px;align-items:center}
+.next-foot .actions{margin-left:auto;display:flex;gap:10px}
+.btn-light{height:40px;padding:0 16px;border-radius:10px;background:#fff;color:var(--forest);font-weight:600;display:inline-flex;align-items:center;gap:8px}
+.btn-ghost{height:40px;padding:0 16px;border-radius:10px;border:1px solid rgba(255,255,255,.3);color:#fff;font-weight:500;display:inline-flex;align-items:center;gap:8px}
+.btn-light:hover{background:var(--laterite-soft)}
+.btn-ghost:hover{background:rgba(255,255,255,.1)}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px}
+.card h3{font-family:var(--head);font-size:18px;font-weight:700;letter-spacing:-.01em}
+.card-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;gap:12px}
+.card-head a{font-size:13.5px;color:var(--forest-2);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+
+.agenda ol{list-style:none;counter-reset:pt;margin-top:4px}
+.agenda li{counter-increment:pt;display:flex;gap:14px;padding:12px 0;border-top:1px solid var(--line)}
+.agenda li:first-child{border-top:0}
+.agenda li::before{content:counter(pt);flex:none;width:26px;height:26px;border-radius:8px;background:var(--paper);display:grid;place-items:center;font-weight:600;font-size:13px;color:var(--forest-2)}
+.agenda li span{font-size:14.5px}
+.agenda .foot{margin-top:10px;font-size:13px;color:var(--muted);display:flex;gap:8px;align-items:center}
+
+/* modules */
+.section-title{font-family:var(--head);font-size:22px;font-weight:700;letter-spacing:-.01em;margin:34px 0 14px}
+.modules{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.mod{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;display:flex;flex-direction:column;gap:12px;transition:border-color .15s,transform .15s}
+.mod:hover{border-color:var(--forest-2);transform:translateY(-2px)}
+.mod .ico{width:46px;height:46px;border-radius:12px;background:var(--ok-soft);color:var(--forest-2);display:grid;place-items:center;flex:none}
+.mod h4{font-family:var(--head);font-size:17px;line-height:1.2}
+.mod p{color:var(--muted);font-size:14px}
+.mod .meta{margin-top:auto;font-size:13px;font-weight:600;color:var(--forest-2)}
+.mod.m-sessions{grid-column:span 2;grid-row:span 2;background:var(--forest-2);border-color:var(--forest-2);color:#fff;padding:30px}
+.m-sessions .ico{background:rgba(255,255,255,.14);color:var(--sun);width:56px;height:56px}
+.m-sessions h4{font-size:26px;letter-spacing:-.01em}
+.m-sessions p{color:#cfe0da;font-size:15.5px;max-width:38ch}
+.m-sessions .meta{color:var(--sun);font-size:14px}
+.m-sessions:hover{border-color:var(--sun)}
+.mod.m-admin{grid-column:span 4;flex-direction:row;align-items:center;gap:20px}
+.m-admin .txt{flex:1}
+.m-admin p{margin-top:2px}
+.m-admin .meta{margin:0;white-space:nowrap}
+
+/* two columns */
+.duo{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:20px;margin-top:20px}
+.sessions-list{list-style:none}
+.sessions-list li{display:grid;grid-template-columns:64px 1fr;gap:8px 16px;align-items:start;padding:16px 0;border-top:1px solid var(--line)}
+.sessions-list li:first-child{border-top:0}
+.sn{grid-row:span 2;font-family:var(--head);font-weight:700;font-size:20px;color:var(--forest-2);line-height:1}
+.sn small{display:block;font-family:var(--body);font-weight:500;font-size:12px;color:var(--muted);margin-top:4px}
+.s-title b{display:block;font-weight:600}
+.s-title span{font-size:13.5px;color:var(--muted)}
+.docs{display:flex;gap:6px;flex-wrap:wrap;grid-column:2}
+.chip{font-size:12.5px;font-weight:600;padding:4px 10px;border-radius:99px;background:var(--ok-soft);color:var(--ok)}
+.chip.off{background:var(--paper);color:#8a9892;font-weight:500;text-decoration:line-through}
+.chip.wait{background:var(--laterite-soft);color:var(--laterite)}
+
+.cantons{list-style:none;display:flex;flex-direction:column;gap:3px}
+.cantons a{display:grid;grid-template-columns:96px 1fr 28px;gap:12px;align-items:center;padding:8px 8px;margin:0 -8px;border-radius:10px}
+.cantons a:hover{background:var(--paper)}
+.cantons .bar{height:8px;background:var(--paper);border-radius:99px;overflow:hidden}
+.cantons .bar i{display:block;height:100%;background:var(--forest-2);border-radius:99px}
+.cantons .n{font-weight:600;text-align:right;font-size:14px}
+
+/* bureau */
+.bureau{margin-top:20px}
+.members{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.member{display:flex;gap:14px;align-items:center}
+.member .avatar{width:54px;height:54px;font-size:18px;background:var(--paper);color:var(--forest-2);border-color:var(--line)}
+.member b{display:block;line-height:1.25}
+.member span{font-size:13.5px;color:var(--muted)}
+
+.note{margin-top:30px;color:var(--muted);font-size:13px;text-align:center}
+
+/* ---------- mobile ---------- */
+.scrim{display:none}
+@media (max-width:1100px){
+  .stage,.duo{grid-template-columns:1fr}
+  .members{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:860px){
+  .app{grid-template-columns:1fr}
+  .side{position:fixed;inset:0 auto 0 0;width:285px;height:100dvh;z-index:30;transform:translateX(-100%);transition:transform .22s ease}
+  body.open .side{transform:none}
+  body.open .scrim{display:block;position:fixed;inset:0;background:rgba(10,25,20,.5);z-index:20}
+  .burger{display:grid}
+  .main{padding:0 18px 40px}
+  .modules{grid-template-columns:1fr 1fr}
+  .mod.m-sessions{grid-column:span 2;grid-row:auto}
+  .mod.m-admin{grid-column:span 2}
+  .next{padding:26px 22px;min-height:0}
+  .next-foot .actions{margin-left:0;width:100%}
+  .search{max-width:none}
+  .top .grow{display:none}
+}
+@media (max-width:560px){
+  .modules{grid-template-columns:1fr}
+  .mod.m-sessions,.mod.m-admin{grid-column:auto}
+  .mod.m-admin{flex-direction:column;align-items:flex-start}
+  .sessions-list li{grid-template-columns:56px 1fr}
+  .members{grid-template-columns:1fr}
+  .top .hide-s{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.nav .badge{margin-left:auto;background:var(--laterite);color:#fff;font-size:12px;font-weight:700;min-width:22px;height:22px;border-radius:99px;display:grid;place-items:center;padding:0 6px}
+.nav .badge[hidden]{display:none}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
+.kpi{display:flex;gap:14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px}
+.kpi:hover{border-color:var(--forest-2)}
+.kpi .ico{width:44px;height:44px;border-radius:12px;background:var(--ok-soft);color:var(--forest-2);display:grid;place-items:center;flex:none}
+.kpi b{display:block;font-family:var(--head);font-size:28px;line-height:1;letter-spacing:-.02em}
+.kpi span{font-size:13.5px;color:var(--muted)}
+.kpi.alert{background:var(--laterite-soft);border-color:#e6bfb2}
+.kpi.alert .ico{background:var(--laterite);color:#fff}
+.kpi.alert b{color:var(--laterite)}
+.stage2{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:20px;margin-bottom:20px}
+.pending-list{list-style:none}
+.pending-list li{display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:center;padding:14px 0;border-top:1px solid var(--line);transition:opacity .25s,transform .25s}
+.pending-list li:first-child{border-top:0}
+.pending-list li.gone{opacity:0;transform:translateX(24px)}
+.pending-list .avatar{width:44px;height:44px;background:var(--paper);color:var(--forest-2);border-color:var(--line)}
+.who b{display:block;font-weight:600;line-height:1.3}
+.who span{font-size:13.5px;color:var(--muted)}
+.acts{display:flex;gap:8px}
+.btn-ok,.btn-no{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 14px;border-radius:10px;font-weight:600;font-size:14px}
+.btn-ok{background:var(--forest);color:#fff}
+.btn-ok:hover{background:var(--forest-2)}
+.btn-no{border:1px solid var(--line);color:var(--laterite);background:#fff}
+.btn-no:hover{background:var(--laterite-soft);border-color:#e6bfb2}
+.btn-ok svg.i,.btn-no svg.i{width:16px;height:16px;stroke-width:2.2}
+.empty{padding:26px 0 6px;color:var(--muted)}
+.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.quick-grid a{display:flex;align-items:center;gap:10px;padding:13px 14px;border:1px solid var(--line);border-radius:12px;font-weight:600;font-size:14.5px;background:#fff}
+.quick-grid a svg{color:var(--forest-2)}
+.quick-grid a:hover{border-color:var(--forest-2);background:var(--ok-soft)}
+.todo li{grid-template-columns:64px 1fr;}
+.todo .docs{grid-column:2}
+.chip.off2{background:var(--paper);color:#8a9892;font-weight:500;text-decoration:line-through}
+.btn-add{grid-column:2;display:inline-flex;align-items:center;gap:8px;width:max-content;height:38px;padding:0 14px;border-radius:10px;border:1px solid var(--forest-2);color:var(--forest-2);font-weight:600;font-size:14px;background:#fff}
+.btn-add:hover{background:var(--forest-2);color:#fff}
+.btn-add svg.i{width:16px;height:16px}
+.btn-add.wide{margin-top:14px}
+.hint{font-size:13px;color:var(--muted);margin-top:10px}
+.log{list-style:none;position:relative;padding-left:22px}
+.log::before{content:"";position:absolute;left:5px;top:8px;bottom:8px;width:2px;background:var(--line)}
+.log li{position:relative;padding:8px 0 14px;font-size:14.5px;line-height:1.4}
+.log li::before{content:"";position:absolute;left:-22px;top:13px;width:12px;height:12px;border-radius:50%;background:#fff;border:2px solid var(--forest-2)}
+.log li:first-child::before{background:var(--sun);border-color:var(--sun)}
+.log time{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}
+.bureau-list{list-style:none}
+.bureau-list li{display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.bureau-list li:first-child{border-top:0}
+.bureau-list .avatar{width:44px;height:44px;background:var(--paper);color:var(--forest-2);border-color:var(--line)}
+.bureau-list b{display:block;line-height:1.25}
+.bureau-list span{font-size:13.5px;color:var(--muted)}
+.icon-btn.s{width:38px;height:38px;border-radius:10px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:var(--forest);color:#fff;padding:12px 18px;border-radius:12px;font-weight:500;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:40;max-width:calc(100vw - 32px)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media (max-width:1100px){.stage2{grid-template-columns:1fr}.kpis{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){
+  .kpis{grid-template-columns:1fr}
+  .pending-list li{grid-template-columns:44px 1fr}
+  .acts{grid-column:1 / -1}
+  .acts button{flex:1;justify-content:center}
+  .todo li{grid-template-columns:56px 1fr}
+  .quick-grid a{padding:12px}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></symbol>
+  <symbol id="i-gavel" viewBox="0 0 24 24"><path d="m14 5 5 5"/><path d="m11.5 7.5 5 5"/><path d="m9 10 5 5"/><path d="M4 20h9"/><path d="m7 17 3-3"/><path d="M13 3.5 17.5 8"/></symbol>
+  <symbol id="i-plan" viewBox="0 0 24 24"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></symbol>
+  <symbol id="i-coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M14.8 9.3c-.5-.8-1.5-1.3-2.8-1.3-1.7 0-2.8.9-2.8 2.1 0 3 5.8 1.2 5.8 4.2 0 1.2-1.2 2.2-3 2.2-1.4 0-2.5-.6-3-1.5"/><path d="M12 6.5V8m0 8v1.5"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.800 12 21 12 21Z"/><circle cx="12" cy="9.500" r="2.500"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 4v16"/><path d="M7 20h10"/><path d="M5 7h14"/><path d="m5 7-3 7a3.500 3.500 0 0 0 6 0L5 7Z"/><path d="m19 7-3 7a3.500 3.500 0 0 0 6 0l-3-7Z"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5.500A2.500 2.500 0 0 1 6.500 3H20v16H6.500A2.500 2.500 0 0 0 4 21.500Z"/><path d="M4 21.500V5.500"/><path d="M9 8h6"/></symbol>
+  <symbol id="i-cog" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.400 15a1.700 1.700 0 0 0 .3 1.800l.1.100a2 2 0 1 1-2.800 2.800l-.1-.1a1.700 1.700 0 0 0-1.800-.3 1.700 1.700 0 0 0-1 1.500V21a2 2 0 1 1-4 0v-.1a1.700 1.700 0 0 0-1.100-1.500 1.700 1.700 0 0 0-1.800.3l-.1.100a2 2 0 1 1-2.800-2.800l.1-.1a1.700 1.700 0 0 0 .3-1.800 1.700 1.700 0 0 0-1.500-1H3a2 2 0 1 1 0-4h.1a1.700 1.700 0 0 0 1.500-1.100 1.700 1.700 0 0 0-.3-1.800l-.1-.1a2 2 0 1 1 2.800-2.800l.1.100a1.700 1.700 0 0 0 1.800.3H9a1.700 1.700 0 0 0 1-1.500V3a2 2 0 1 1 4 0v.1a1.700 1.700 0 0 0 1 1.500 1.700 1.700 0 0 0 1.800-.3l.1-.1a2 2 0 1 1 2.800 2.800l-.1.100a1.700 1.700 0 0 0-.3 1.800V9a1.700 1.700 0 0 0 1.500 1H21a2 2 0 1 1 0 4h-.1a1.700 1.700 0 0 0-1.500 1Z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.500-3.500"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 20a2 2 0 0 0 4 0"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.500"/><path d="M2.500 20c0-3.300 2.900-5.500 6.500-5.500s6.500 2.200 6.500 5.500"/><path d="M16 4.600a3.500 3.500 0 0 1 0 6.800"/><path d="M18 14.800c2 .7 3.500 2.400 3.500 5.200"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.500 4.500 4.500L19 7.500"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></symbol>
+  <symbol id="i-activity" viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16Z"/><path d="m13.500 6.500 4 4"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4"/><path d="M5 4h11l-2 4 2 4H5"/></symbol>
+</svg>
+<div class="app">
+  <aside class="side" id="menu" aria-label="Navigation principale">
+    <div class="brand">
+      <div class="brand-mark"><svg class="i"><use href="#i-scale"/></svg></div>
+      <div><b>Espace du conseil</b><span>Conseil municipal</span></div>
+    </div>
+    <nav class="nav">
+      <a href="#" aria-current="page"><svg class="i"><use href="#i-home"/></svg>Tableau de bord</a>
+      <a href="#"><svg class="i"><use href="#i-gavel"/></svg>Sessions</a>
+      <a href="#"><svg class="i"><use href="#i-plan"/></svg>Plan d'investissement</a>
+      <a href="#"><svg class="i"><use href="#i-coin"/></svg>Budgets</a>
+      <a href="#"><svg class="i"><use href="#i-pin"/></svg>Besoins prioritaires</a>
+      <a href="#"><svg class="i"><use href="#i-scale"/></svg>Délibérations</a>
+      <a href="#"><svg class="i"><use href="#i-book"/></svg>Administration</a>
+      <div class="sep"></div>
+      <a href="#"><svg class="i"><use href="#i-users"/></svg>Comptes<span class="badge" id="navBadge">3</span></a>
+      <a href="#"><svg class="i"><use href="#i-activity"/></svg>Journal d'activité</a>
+      <div class="sep"></div>
+      <a href="#"><svg class="i"><use href="#i-cog"/></svg>Paramètres</a>
+    </nav>
+    <div class="me">
+      <div class="avatar">KA</div>
+      <div><b>Koffi Amegan</b><small>Administrateur</small></div>
+    </div>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+  <div class="main">
+    <header class="top">
+      <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-controls="menu"><svg class="i"><use href="#i-menu"/></svg></button>
+      <label class="search">
+        <svg class="i"><use href="#i-search"/></svg>
+        <input type="search" placeholder="Rechercher une session, un document, un canton">
+      </label>
+      <span class="grow"></span>
+      <button class="icon-btn" aria-label="Notifications"><svg class="i"><use href="#i-bell"/></svg><span class="dot"></span></button>
+    </header>
+    <section class="hello">
+      <div>
+        <h1>Tableau de bord de l'administration</h1>
+        <p>Mercredi 21 octobre 2026. Trois comptes attendent votre validation.</p>
+      </div>
+      <a class="btn" href="#"><svg class="i"><use href="#i-plus"/></svg>Nouvelle session</a>
+    </section>
+
+    <section class="kpis">
+      <a class="kpi alert" href="#"><div class="ico"><svg class="i"><use href="#i-users"/></svg></div><div><b id="kpiPending">3</b><span>comptes à valider</span></div></a>
+      <a class="kpi" href="#"><div class="ico"><svg class="i"><use href="#i-file"/></svg></div><div><b>2</b><span>sessions à compléter</span></div></a>
+      <a class="kpi" href="#"><div class="ico"><svg class="i"><use href="#i-users"/></svg></div><div><b>24</b><span>conseillers actifs</span></div></a>
+      <a class="kpi" href="#"><div class="ico"><svg class="i"><use href="#i-book"/></svg></div><div><b>118</b><span>documents publiés</span></div></a>
+    </section>
+
+    <section class="stage2">
+      <article class="card pend">
+        <div class="card-head"><h3>Comptes à valider</h3><a href="#">Tous les comptes</a></div>
+        <ul class="pending-list" id="pendingList">
+          <li data-name="Ama Kpodar">
+            <div class="avatar">AK</div>
+            <div class="who"><b>Ama Kpodar</b><span>Conseillère, canton de Davié, demande du 20 octobre</span></div>
+            <div class="acts"><button class="btn-no" data-act="refuse"><svg class="i"><use href="#i-x"/></svg>Refuser</button><button class="btn-ok" data-act="ok"><svg class="i"><use href="#i-check"/></svg>Valider</button></div>
+          </li>
+          <li data-name="Komi Ayivi">
+            <div class="avatar">KY</div>
+            <div class="who"><b>Komi Ayivi</b><span>Conseiller, canton de Kpomé, demande du 19 octobre</span></div>
+            <div class="acts"><button class="btn-no" data-act="refuse"><svg class="i"><use href="#i-x"/></svg>Refuser</button><button class="btn-ok" data-act="ok"><svg class="i"><use href="#i-check"/></svg>Valider</button></div>
+          </li>
+          <li data-name="Sena Agbodjan">
+            <div class="avatar">SA</div>
+            <div class="who"><b>Sena Agbodjan</b><span>Conseillère, canton d'Abobo, demande du 18 octobre</span></div>
+            <div class="acts"><button class="btn-no" data-act="refuse"><svg class="i"><use href="#i-x"/></svg>Refuser</button><button class="btn-ok" data-act="ok"><svg class="i"><use href="#i-check"/></svg>Valider</button></div>
+          </li>
+        </ul>
+        <p class="empty" id="emptyMsg" hidden>Aucun compte en attente. Les nouvelles demandes apparaîtront ici.</p>
+      </article>
+
+      <article class="card quick">
+        <div class="card-head"><h3>Ajouter du contenu</h3></div>
+        <div class="quick-grid">
+          <a href="#"><svg class="i"><use href="#i-gavel"/></svg>Session</a>
+          <a href="#"><svg class="i"><use href="#i-upload"/></svg>Compte rendu</a>
+          <a href="#"><svg class="i"><use href="#i-plan"/></svg>Plan PAI</a>
+          <a href="#"><svg class="i"><use href="#i-coin"/></svg>Budget</a>
+          <a href="#"><svg class="i"><use href="#i-pin"/></svg>Besoin</a>
+          <a href="#"><svg class="i"><use href="#i-scale"/></svg>Délibération</a>
+          <a href="#"><svg class="i"><use href="#i-flag"/></svg>Bureau exécutif</a>
+          <a href="#"><svg class="i"><use href="#i-users"/></svg>Conseiller</a>
+        </div>
+      </article>
+    </section>
+
+    <section class="duo">
+      <article class="card">
+        <div class="card-head"><h3>Sessions à compléter</h3><a href="#">Toutes les sessions</a></div>
+        <ul class="sessions-list todo">
+          <li>
+            <div class="sn">04/26<small>29 oct.</small></div>
+            <div class="docs"><span class="chip">Ordre du jour</span><span class="chip off2">OJ validé</span><span class="chip off2">Compte rendu</span><span class="chip off2">Décisions</span></div>
+            <a class="btn-add" href="#"><svg class="i"><use href="#i-upload"/></svg>Ajouter l'OJ validé</a>
+          </li>
+          <li>
+            <div class="sn">03/26<small>25 sept.</small></div>
+            <div class="docs"><span class="chip">Ordre du jour</span><span class="chip">OJ validé</span><span class="chip off2">Compte rendu</span><span class="chip off2">Décisions</span></div>
+            <a class="btn-add" href="#"><svg class="i"><use href="#i-upload"/></svg>Ajouter le compte rendu</a>
+          </li>
+        </ul>
+        <p class="hint">Les documents manquants sont barrés. Une session est clôturée quand les quatre sont ajoutés.</p>
+      </article>
+
+      <article class="card">
+        <div class="card-head"><h3>Activité récente</h3><a href="#">Journal complet</a></div>
+        <ol class="log">
+          <li><b>Koffi Amegan</b> a ajouté l'ordre du jour de la session 04/26<time>Hier, 16 h 12</time></li>
+          <li><b>Koffi Amegan</b> a remplacé le plan PAI 2026<time>19 oct., 10 h 05</time></li>
+          <li><b>Yawa Dogbe</b> a ajouté 2 besoins au canton de Davié<time>16 oct., 14 h 40</time></li>
+          <li><b>Koffi Amegan</b> a validé le compte de Mawuli Tsogbe<time>15 oct., 09 h 18</time></li>
+          <li><b>Koffi Amegan</b> a ajouté le budget supplémentaire n°1<time>12 oct., 11 h 30</time></li>
+        </ol>
+      </article>
+    </section>
+
+    <section class="duo">
+      <article class="card">
+        <div class="card-head"><h3>Besoins par canton</h3><a href="#">Gérer les besoins</a></div>
+        <ul class="cantons">
+<li><a href="#"><span>Tsévié</span><span class="bar"><i style="width:90%"></i></span><span class="n">9</span></a></li>
+<li><a href="#"><span>Gbatopé</span><span class="bar"><i style="width:60%"></i></span><span class="n">6</span></a></li>
+<li><a href="#"><span>Davié</span><span class="bar"><i style="width:70%"></i></span><span class="n">7</span></a></li>
+<li><a href="#"><span>Djagblé</span><span class="bar"><i style="width:40%"></i></span><span class="n">4</span></a></li>
+<li><a href="#"><span>Kpomé</span><span class="bar"><i style="width:50%"></i></span><span class="n">5</span></a></li>
+<li><a href="#"><span>Abobo</span><span class="bar"><i style="width:30%"></i></span><span class="n">3</span></a></li>
+<li><a href="#"><span>Gblinvié</span><span class="bar"><i style="width:80%"></i></span><span class="n">8</span></a></li>
+<li><a href="#"><span>Avéta</span><span class="bar"><i style="width:50%"></i></span><span class="n">5</span></a></li>
+        </ul>
+      </article>
+      <article class="card bureau-a">
+        <div class="card-head"><h3>Bureau exécutif</h3><a href="#">Gérer</a></div>
+        <ul class="bureau-list">
+          <li><div class="avatar">KA</div><div><b>Koffi Amegan</b><span>Maire</span></div><button class="icon-btn s" aria-label="Modifier Koffi Amegan"><svg class="i"><use href="#i-edit"/></svg></button></li>
+          <li><div class="avatar">EL</div><div><b>Esso Lawson</b><span>Premier adjoint</span></div><button class="icon-btn s" aria-label="Modifier Esso Lawson"><svg class="i"><use href="#i-edit"/></svg></button></li>
+          <li><div class="avatar">YD</div><div><b>Yawa Dogbe</b><span>Deuxième adjointe</span></div><button class="icon-btn s" aria-label="Modifier Yawa Dogbe"><svg class="i"><use href="#i-edit"/></svg></button></li>
+          <li><div class="avatar">MT</div><div><b>Mawuli Tsogbe</b><span>Rapporteur</span></div><button class="icon-btn s" aria-label="Modifier Mawuli Tsogbe"><svg class="i"><use href="#i-edit"/></svg></button></li>
+        </ul>
+        <a class="btn-add wide" href="#"><svg class="i"><use href="#i-plus"/></svg>Ajouter un membre</a>
+      </article>
+    </section>
+    <p class="note">Maquette avec des données d'exemple : noms, dates et chiffres sont à remplacer par les données réelles.</p>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+  var b=document.body;
+  document.getElementById('burger').addEventListener('click',function(){b.classList.toggle('open')});
+  document.getElementById('scrim').addEventListener('click',function(){b.classList.remove('open')});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')b.classList.remove('open')});
+
+  var list=document.getElementById('pendingList'),toast=document.getElementById('toast'),t;
+  function say(m){toast.textContent=m;toast.classList.add('show');clearTimeout(t);t=setTimeout(function(){toast.classList.remove('show')},2600)}
+  function sync(){
+    var n=list.querySelectorAll('li:not(.gone)').length;
+    document.getElementById('kpiPending').textContent=n;
+    var nb=document.getElementById('navBadge');nb.textContent=n;nb.hidden=n===0;
+    document.getElementById('emptyMsg').hidden=n>0;
+    document.querySelector('.hello p').textContent='Mercredi 21 octobre 2026. '+(n===0?'Aucun compte n\'attend votre validation.':(n===1?'Un compte attend votre validation.':n+' comptes attendent votre validation.'));
+  }
+  list.addEventListener('click',function(e){
+    var bt=e.target.closest('button');if(!bt)return;
+    var li=bt.closest('li'),name=li.getAttribute('data-name');
+    li.classList.add('gone');
+    setTimeout(function(){li.remove();sync()},260);
+    say(bt.dataset.act==='ok'?'Compte de '+name+' validé. L\'utilisateur peut se connecter.':'Compte de '+name+' refusé.');
+    li.classList.add('gone');
+  });
+
+</script>
+</body>
+</html>
