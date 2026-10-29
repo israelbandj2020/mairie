@@ -12,32 +12,35 @@ class Deliberation extends Model
     protected $fillable = [
         'session_travail_id',
         'titre',
+        'description',
+        'date',
         'chemin',
         'nom_original',
         'mime',
         'taille',
-        'ajoute_par',
+        'cree_par',
     ];
 
     protected $casts = [
         'taille' => 'integer',
+        'date' => 'date',
     ];
 
-    public function sessionTravail()
+    public function session()
     {
         return $this->belongsTo(SessionTravail::class, 'session_travail_id');
     }
 
-    public function ajoutePar()
+    public function creePar()
     {
-        return $this->belongsTo(User::class, 'ajoute_par');
+        return $this->belongsTo(User::class, 'cree_par');
     }
 
     public function scopeSearch($query, $q)
     {
         if ($q) {
             return $query->where('titre', 'like', "%{$q}%")
-                ->orWhereHas('sessionTravail', function ($subQuery) use ($q) {
+                ->orWhereHas('session', function ($subQuery) use ($q) {
                     $subQuery->where('nom', 'like', "%{$q}%")
                         ->orWhere('numero', 'like', "%{$q}%");
                 });

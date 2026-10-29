@@ -11,13 +11,16 @@ return new class extends Migration
         Schema::create('sessions_travail', function (Blueprint $table) {
             $table->id();
             $table->string('numero')->unique();
-            $table->string('nom');
-            $table->date('date_session');
+            $table->string('nom')->nullable();
+            $table->date('date');
+            $table->string('lieu')->nullable();
+            $table->enum('statut', ['planifiee', 'en_cours', 'terminee', 'annulee'])->default('planifiee');
             $table->foreignId('cree_par')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
 
             $table->index('numero');
             $table->index('nom');
+            $table->index('date');
         });
     }
 

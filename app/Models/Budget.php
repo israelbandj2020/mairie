@@ -12,31 +12,31 @@ class Budget extends Model
     protected $fillable = [
         'annee',
         'type',
-        'libelle',
+        'montant',
         'chemin',
         'nom_original',
         'mime',
         'taille',
-        'ajoute_par',
+        'cree_par',
     ];
 
     protected $casts = [
         'annee' => 'integer',
+        'montant' => 'decimal:2',
         'taille' => 'integer',
     ];
 
-    public function ajoutePar()
+    public function creePar()
     {
-        return $this->belongsTo(User::class, 'ajoute_par');
+        return $this->belongsTo(User::class, 'cree_par');
     }
 
-    public function scopeAnnuel($query)
+    public function getTypeLabelAttribute(): string
     {
-        return $query->where('type', 'annuel');
-    }
-
-    public function scopeSupplementaire($query)
-    {
-        return $query->where('type', 'supplementaire');
+        return match ($this->type) {
+            'annuel' => 'Budget annuel',
+            'supplementaire' => 'Budget supplémentaire',
+            default => $this->type,
+        };
     }
 }

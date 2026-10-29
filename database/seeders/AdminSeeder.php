@@ -15,7 +15,7 @@ class AdminSeeder extends Seeder
             [
                 'nom' => 'Admin',
                 'prenom' => 'Système',
-                'password' => Hash::make(env('ADMIN_PASSWORD', 'password')),
+                'password' => Hash::make(env('ADMIN_PASSWORD', '12345678')),
                 'role' => 'admin',
                 'statut' => 'valide',
                 'valide_le' => now(),

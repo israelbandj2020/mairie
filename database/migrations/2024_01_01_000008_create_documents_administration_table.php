@@ -10,12 +10,12 @@ return new class extends Migration
     {
         Schema::create('documents_administration', function (Blueprint $table) {
             $table->id();
-            $table->enum('type', ['loi_decentralisation', 'reglement_interieur'])->unique();
+            $table->string('titre');
             $table->string('chemin');
             $table->string('nom_original');
             $table->string('mime');
             $table->unsignedBigInteger('taille');
-            $table->foreignId('ajoute_par')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('cree_par')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
         });
     }

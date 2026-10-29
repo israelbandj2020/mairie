@@ -9,15 +9,19 @@ class SessionTravail extends Model
 {
     use HasFactory;
 
+    protected $table = 'sessions_travail';
+
     protected $fillable = [
         'numero',
         'nom',
-        'date_session',
+        'date',
+        'lieu',
+        'statut',
         'cree_par',
     ];
 
     protected $casts = [
-        'date_session' => 'date',
+        'date' => 'date',
     ];
 
     public function creePar()
@@ -35,30 +39,15 @@ class SessionTravail extends Model
         return $this->hasMany(Deliberation::class, 'session_travail_id');
     }
 
-    public function getStatutAttribute(): string
+    public function getStatutLabelAttribute(): string
     {
-        $aOrdreDuJour = $this->documents()->where('type', 'ordre_du_jour')->exists();
-        $aOrdreDuJourValide = $this->documents()->where('type', 'ordre_du_jour_valide')->exists();
-        $aCompteRendu = $this->documents()->where('type', 'compte_rendu')->exists();
-        $aDecisions = $this->documents()->where('type', 'decision')->exists();
-
-        if (!$aOrdreDuJour) {
-            return 'Planifiée';
-        }
-
-        if ($aOrdreDuJour && !$aOrdreDuJourValide) {
-            return 'Ordre du jour publié';
-        }
-
-        if ($aOrdreDuJourValide && !$aCompteRendu && !$aDecisions) {
-            return 'Tenue';
-        }
-
-        if ($aCompteRendu && $aDecisions) {
-            return 'Clôturée';
-        }
-
-        return 'Planifiée';
+        return match ($this->statut) {
+            'planifiee' => 'Planifiée',
+            'en_cours' => 'En cours',
+            'terminee' => 'Terminée',
+            'annulee' => 'Annulée',
+            default => $this->statut,
+        };
     }
 
     public function scopeSearch($query, $q)
@@ -73,7 +62,7 @@ class SessionTravail extends Model
     public function scopeByAnnee($query, $annee)
     {
         if ($annee) {
-            return $query->whereYear('date_session', $annee);
+            return $query->whereYear('date', $annee);
         }
         return $query;
     }
@@ -81,9 +70,7 @@ class SessionTravail extends Model
     public function scopeByStatut($query, $statut)
     {
         if ($statut) {
-            return $query->whereHas('documents', function ($q) use ($statut) {
-                // Logique complexe à adapter selon le statut
-            });
+            return $query->where('statut', $statut);
         }
         return $query;
     }

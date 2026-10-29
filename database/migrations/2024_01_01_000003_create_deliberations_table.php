@@ -10,13 +10,15 @@ return new class extends Migration
     {
         Schema::create('deliberations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('session_travail_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('session_travail_id')->constrained('sessions_travail')->cascadeOnDelete();
             $table->string('titre');
+            $table->text('description');
+            $table->date('date');
             $table->string('chemin');
             $table->string('nom_original');
             $table->string('mime');
             $table->unsignedBigInteger('taille');
-            $table->foreignId('ajoute_par')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('cree_par')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
         });
     }

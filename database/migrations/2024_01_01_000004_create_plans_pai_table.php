@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('nom_original');
             $table->string('mime');
             $table->unsignedBigInteger('taille');
-            $table->foreignId('ajoute_par')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('cree_par')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
         });
     }

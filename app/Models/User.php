@@ -26,6 +26,10 @@ class User extends Authenticatable
         'telephone',
         'fonction',
         'photo',
+        'role',
+        'statut',
+        'valide_le',
+        'valide_par',
     ];
 
     /**
@@ -72,6 +76,25 @@ class User extends Authenticatable
         return $this->statut === 'valide';
     }
 
+    public function getRoleLabelAttribute(): string
+    {
+        return match ($this->role) {
+            'admin' => 'Administrateur',
+            'conseiller' => 'Conseiller',
+            default => $this->role,
+        };
+    }
+
+    public function getStatutLabelAttribute(): string
+    {
+        return match ($this->statut) {
+            'en_attente' => 'En attente',
+            'valide' => 'Validé',
+            'suspendu' => 'Suspendu',
+            default => $this->statut,
+        };
+    }
+
     public function validePar()
     {
         return $this->belongsTo(User::class, 'valide_par');
@@ -89,22 +112,22 @@ class User extends Authenticatable
 
     public function sessionDocuments()
     {
-        return $this->hasMany(SessionDocument::class, 'ajoute_par');
+        return $this->hasMany(SessionDocument::class, 'cree_par');
     }
 
     public function deliberations()
     {
-        return $this->hasMany(Deliberation::class, 'ajoute_par');
+        return $this->hasMany(Deliberation::class, 'cree_par');
     }
 
     public function plansPai()
     {
-        return $this->hasMany(PlanPai::class, 'ajoute_par');
+        return $this->hasMany(PlanPai::class, 'cree_par');
     }
 
     public function budgets()
     {
-        return $this->hasMany(Budget::class, 'ajoute_par');
+        return $this->hasMany(Budget::class, 'cree_par');
     }
 
     public function besoins()
@@ -114,7 +137,7 @@ class User extends Authenticatable
 
     public function documentsAdministration()
     {
-        return $this->hasMany(DocumentAdministration::class, 'ajoute_par');
+        return $this->hasMany(DocumentAdministration::class, 'cree_par');
     }
 
     public function membreBureau()

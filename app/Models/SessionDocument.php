@@ -17,7 +17,7 @@ class SessionDocument extends Model
         'nom_original',
         'mime',
         'taille',
-        'ajoute_par',
+        'cree_par',
     ];
 
     protected $casts = [
@@ -29,8 +29,20 @@ class SessionDocument extends Model
         return $this->belongsTo(SessionTravail::class, 'session_travail_id');
     }
 
-    public function ajoutePar()
+    public function creePar()
     {
-        return $this->belongsTo(User::class, 'ajoute_par');
+        return $this->belongsTo(User::class, 'cree_par');
+    }
+
+    public function getTypeLabelAttribute(): string
+    {
+        return match ($this->type) {
+            'ordre_du_jour' => 'Ordre du jour',
+            'ordre_du_jour_valide' => 'OJ validé',
+            'compte_rendu' => 'Compte rendu',
+            'decision' => 'Décision',
+            'document' => 'Document',
+            default => $this->type,
+        };
     }
 }

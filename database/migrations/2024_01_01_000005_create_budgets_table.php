@@ -11,13 +11,13 @@ return new class extends Migration
         Schema::create('budgets', function (Blueprint $table) {
             $table->id();
             $table->year('annee');
-            $table->enum('type', ['annuel', 'supplementaire']);
-            $table->string('libelle');
+            $table->enum('type', ['annuel', 'supplementaire'])->default('annuel');
+            $table->decimal('montant', 15, 2);
             $table->string('chemin');
             $table->string('nom_original');
             $table->string('mime');
             $table->unsignedBigInteger('taille');
-            $table->foreignId('ajoute_par')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('cree_par')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
         });
     }

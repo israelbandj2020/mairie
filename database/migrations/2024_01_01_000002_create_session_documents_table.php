@@ -10,14 +10,14 @@ return new class extends Migration
     {
         Schema::create('session_documents', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('session_travail_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('session_travail_id')->constrained('sessions_travail')->cascadeOnDelete();
             $table->enum('type', ['document', 'ordre_du_jour', 'ordre_du_jour_valide', 'compte_rendu', 'decision']);
             $table->string('titre')->nullable();
             $table->string('chemin');
             $table->string('nom_original');
             $table->string('mime');
             $table->unsignedBigInteger('taille');
-            $table->foreignId('ajoute_par')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('cree_par')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
         });
     }

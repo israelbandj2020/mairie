@@ -13,24 +13,17 @@ return [
     | Limites de fichiers (en octets)
     |--------------------------------------------------------------------------
     */
-    'fichiers' => [
-        'session_document_max' => 10 * 1024 * 1024, // 10 Mo
-        'deliberation_max' => 10 * 1024 * 1024, // 10 Mo
-        'pai_max' => 20 * 1024 * 1024, // 20 Mo
-        'budget_max' => 20 * 1024 * 1024, // 20 Mo
-        'administration_max' => 20 * 1024 * 1024, // 20 Mo
-        'photo_max' => 2 * 1024 * 1024, // 2 Mo
-    ],
+    'session_document_max' => 10 * 1024 * 1024, // 10 Mo
+    'pai_max' => 20 * 1024 * 1024, // 20 Mo
+    'photo_max' => 2 * 1024 * 1024, // 2 Mo
 
     /*
     |--------------------------------------------------------------------------
     | Extensions autorisées
     |--------------------------------------------------------------------------
     */
-    'extensions' => [
-        'pdf' => ['pdf'],
-        'image' => ['jpg', 'jpeg', 'png'],
-    ],
+    'pdf' => ['pdf'],
+    'image' => ['jpg', 'jpeg', 'png', 'webp'],
 
     /*
     |--------------------------------------------------------------------------
@@ -39,6 +32,6 @@ return [
     */
     'mime_types' => [
         'pdf' => ['application/pdf'],
-        'image' => ['image/jpeg', 'image/png', 'image/jpg'],
+        'image' => ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'],
     ],
 ];

@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('membres_bureau', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete()->unique();
-            $table->string('poste');
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete()->unique();
+            $table->string('role');
             $table->unsignedInteger('ordre')->default(0);
             $table->timestamps();
         });

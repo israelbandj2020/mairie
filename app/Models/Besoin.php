@@ -16,6 +16,7 @@ class Besoin extends Model
         'titre',
         'description',
         'priorite',
+        'statut',
         'cree_par',
     ];
 
@@ -27,6 +28,26 @@ class Besoin extends Model
     public function creePar()
     {
         return $this->belongsTo(User::class, 'cree_par');
+    }
+
+    public function getPrioriteLabelAttribute(): string
+    {
+        return match ($this->priorite) {
+            'haute' => 'Haute',
+            'moyenne' => 'Moyenne',
+            'basse' => 'Basse',
+            default => $this->priorite,
+        };
+    }
+
+    public function getStatutLabelAttribute(): string
+    {
+        return match ($this->statut) {
+            'en_cours' => 'En cours',
+            'traite' => 'Traité',
+            'rejete' => 'Rejeté',
+            default => $this->statut,
+        };
     }
 
     public function scopeByPriorite($query)

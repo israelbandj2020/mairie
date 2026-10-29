@@ -9,13 +9,15 @@ class PlanPai extends Model
 {
     use HasFactory;
 
+    protected $table = 'plans_pai';
+
     protected $fillable = [
         'annee',
         'chemin',
         'nom_original',
         'mime',
         'taille',
-        'ajoute_par',
+        'cree_par',
     ];
 
     protected $casts = [
@@ -23,8 +25,8 @@ class PlanPai extends Model
         'taille' => 'integer',
     ];
 
-    public function ajoutePar()
+    public function creePar()
     {
-        return $this->belongsTo(User::class, 'ajoute_par');
+        return $this->belongsTo(User::class, 'cree_par');
     }
 }

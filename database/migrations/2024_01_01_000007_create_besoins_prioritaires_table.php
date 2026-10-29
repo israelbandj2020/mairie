@@ -10,10 +10,11 @@ return new class extends Migration
     {
         Schema::create('besoins_prioritaires', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('canton_id')->constrained()->cascadeOnDelete();
-            $table->string('titre');
-            $table->text('description')->nullable();
+            $table->foreignId('canton_id')->constrained('cantons')->cascadeOnDelete();
+            $table->string('titre')->nullable();
+            $table->text('description');
             $table->enum('priorite', ['haute', 'moyenne', 'basse'])->default('moyenne');
+            $table->enum('statut', ['en_cours', 'traite', 'rejete'])->default('en_cours');
             $table->foreignId('cree_par')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
         });

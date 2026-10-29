@@ -1,59 +1,87 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - {{ config('conseil.commune', 'Conseil municipal') }}</title>
+    <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
+</head>
+<body class="auth">
+    <div class="auth-box">
+        <h1>Inscription</h1>
+        <p>Créez votre compte pour accéder à l'espace conseil.</p>
 
-        <!-- Nom -->
-        <div>
-            <x-input-label for="nom" :value="__('Nom')" />
-            <x-text-input id="nom" class="block mt-1 w-full" type="text" name="nom" :value="old('nom')" required autofocus autocomplete="family-name" />
-            <x-input-error :messages="$errors->get('nom')" class="mt-2" />
-        </div>
+        <form method="POST" action="{{ route('register') }}">
+            @csrf
 
-        <!-- Prénom -->
-        <div class="mt-4">
-            <x-input-label for="prenom" :value="__('Prénom')" />
-            <x-text-input id="prenom" class="block mt-1 w-full" type="text" name="prenom" :value="old('prenom')" required autocomplete="given-name" />
-            <x-input-error :messages="$errors->get('prenom')" class="mt-2" />
-        </div>
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600;">Nom</label>
+                <input type="text" name="nom" value="{{ old('nom') }}" required autofocus autocomplete="family-name" style="width: 100%; padding: 12px; border: 1px solid var(--line); border-radius: 8px; font-size: 15px;">
+                @error('nom') <p style="color: var(--laterite); margin-top: 6px; font-size: 13px;">{{ $message }}</p> @enderror
+            </div>
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600;">Prénom</label>
+                <input type="text" name="prenom" value="{{ old('prenom') }}" required autocomplete="given-name" style="width: 100%; padding: 12px; border: 1px solid var(--line); border-radius: 8px; font-size: 15px;">
+                @error('prenom') <p style="color: var(--laterite); margin-top: 6px; font-size: 13px;">{{ $message }}</p> @enderror
+            </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Mot de passe')" />
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600;">Email</label>
+                <input type="email" name="email" value="{{ old('email') }}" required autocomplete="username" style="width: 100%; padding: 12px; border: 1px solid var(--line); border-radius: 8px; font-size: 15px;">
+                @error('email') <p style="color: var(--laterite); margin-top: 6px; font-size: 13px;">{{ $message }}</p> @enderror
+            </div>
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600;">Téléphone</label>
+                <input type="tel" name="telephone" value="{{ old('telephone') }}" autocomplete="tel" style="width: 100%; padding: 12px; border: 1px solid var(--line); border-radius: 8px; font-size: 15px;">
+                @error('telephone') <p style="color: var(--laterite); margin-top: 6px; font-size: 13px;">{{ $message }}</p> @enderror
+            </div>
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600;">Mot de passe</label>
+                <input type="password" name="password" required autocomplete="new-password" style="width: 100%; padding: 12px; border: 1px solid var(--line); border-radius: 8px; font-size: 15px;">
+                @error('password') <p style="color: var(--laterite); margin-top: 6px; font-size: 13px;">{{ $message }}</p> @enderror
+            </div>
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirmer le mot de passe')" />
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600;">Confirmer le mot de passe</label>
+                <input type="password" name="password_confirmation" required autocomplete="new-password" style="width: 100%; padding: 12px; border: 1px solid var(--line); border-radius: 8px; font-size: 15px;">
+                @error('password_confirmation') <p style="color: var(--laterite); margin-top: 6px; font-size: 13px;">{{ $message }}</p> @enderror
+            </div>
 
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px;">
+                <a href="{{ route('login') }}" style="color: var(--primary); text-decoration: none; font-size: 14px;">Déjà inscrit ?</a>
+                <button type="submit" class="btn-ok">S'inscrire</button>
+            </div>
+        </form>
+    </div>
 
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                {{ __('Déjà inscrit ?') }}
-            </a>
-
-            <x-primary-button class="ms-4">
-                {{ __("S'inscrire") }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+    <style>
+        body.auth {
+            background: linear-gradient(135deg, var(--bg) 0%, var(--line) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .auth-box {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        .auth-box h1 {
+            margin: 0 0 8px 0;
+            font-size: 24px;
+        }
+        .auth-box p {
+            margin: 0 0 24px 0;
+            color: var(--muted);
+        }
+    </style>
+</body>
+</html>

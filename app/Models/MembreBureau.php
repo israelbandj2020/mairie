@@ -9,9 +9,11 @@ class MembreBureau extends Model
 {
     use HasFactory;
 
+    protected $table = 'membres_bureau';
+
     protected $fillable = [
         'user_id',
-        'poste',
+        'role',
         'ordre',
     ];
 

@@ -10,7 +10,6 @@ class CantonSeeder extends Seeder
     public function run(): void
     {
         $cantons = [
-            'Tsévié',
             'Gbatopé',
             'Davié',
             'Djagblé',
