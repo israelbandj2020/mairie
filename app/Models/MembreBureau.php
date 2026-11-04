@@ -14,6 +14,7 @@ class MembreBureau extends Model
     protected $fillable = [
         'user_id',
         'role',
+        'telephone',
         'ordre',
     ];
 

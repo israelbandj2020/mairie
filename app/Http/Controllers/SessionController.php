@@ -28,13 +28,19 @@ class SessionController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'numero' => 'required|string|max:50',
             'date' => 'required|date',
             'lieu' => 'nullable|string|max:255',
             'statut' => 'required|in:planifiee,en_cours,terminee,annulee',
         ]);
 
+        try {
+            $numero = SessionTravail::genererNumero($validated['date']);
+        } catch (\Exception $e) {
+            return back()->withInput()->with('erreur', $e->getMessage());
+        }
+
         $session = SessionTravail::create([
+            'numero' => $numero,
             ...$validated,
             'cree_par' => Auth::id(),
         ]);
@@ -57,7 +63,6 @@ class SessionController extends Controller
     public function update(Request $request, SessionTravail $session)
     {
         $validated = $request->validate([
-            'numero' => 'required|string|max:50',
             'date' => 'required|date',
             'lieu' => 'nullable|string|max:255',
             'statut' => 'required|in:planifiee,en_cours,terminee,annulee',

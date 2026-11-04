@@ -24,7 +24,7 @@
     <div class="items-list" id="deliberationsList">
       @forelse($deliberations as $deliberation)
         <div class="item-row deliberation-item"
-             data-search="{{ strtolower($deliberation->titre . ' ' . $deliberation->date->translatedFormat('d F Y') . ' ' . ($deliberation->session->numero ?? 'Sans session')) }}">
+             data-search="{{ strtolower($deliberation->titre . ' ' . $deliberation->date->translatedFormat('d F Y') . ' ' . ($deliberation->session->numero ?? 'Sans session') . ' ' . ($deliberation->numero_enregistrement ?? '')) }}">
 
           <div class="item-icon" style="background:var(--blue-soft);color:var(--blue)">
             <svg class="i"><use href="#i-scale"/></svg>
@@ -33,6 +33,9 @@
           <div class="item-body">
             <span class="item-title">{{ $deliberation->titre }}</span>
             <span class="item-meta">
+              @if($deliberation->numero_enregistrement)
+                <span class="chip">{{ $deliberation->numero_enregistrement }}</span>
+              @endif
               {{ $deliberation->date->translatedFormat('d F Y') }}
               @if($deliberation->session)
                 &middot; Session {{ $deliberation->session->numero }}

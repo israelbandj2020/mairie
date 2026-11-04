@@ -14,17 +14,16 @@
       @csrf
       @method('PUT')
 
-      <div class="field-row">
-        <div class="field">
-          <label class="field-label">Numéro de session</label>
-          <input type="text" name="numero" value="{{ old('numero', $session->numero) }}" required class="f-input">
-          @error('numero') <p class="field-error">{{ $message }}</p> @enderror
-        </div>
-        <div class="field">
-          <label class="field-label">Date</label>
-          <input type="date" name="date" value="{{ old('date', $session->date->format('Y-m-d')) }}" required class="f-input">
-          @error('date') <p class="field-error">{{ $message }}</p> @enderror
-        </div>
+      <div class="field">
+        <label class="field-label">Numéro de session</label>
+        <input type="text" value="{{ $session->numero }}" disabled class="f-input" style="background:var(--paper-2)">
+        <p class="field-hint">Le numéro de session ne peut pas être modifié</p>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Date</label>
+        <input type="date" name="date" value="{{ old('date', $session->date->format('Y-m-d')) }}" required class="f-input">
+        @error('date') <p class="field-error">{{ $message }}</p> @enderror
       </div>
 
       <div class="field">

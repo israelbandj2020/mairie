@@ -19,7 +19,7 @@ class FichierService
     /**
      * Valide et enregistre un fichier
      */
-    public function enregistrer(UploadedFile $file, string $type): array
+    public function enregistrer(UploadedFile $file, string $type, string $disk = 'local'): array
     {
         $config = $this->getConfig($type);
 
@@ -27,7 +27,7 @@ class FichierService
 
         $nomOriginal = $file->getClientOriginalName();
         $nomAleatoire = Str::random(40) . '.' . $file->getClientOriginalExtension();
-        $chemin = $file->storeAs('', $nomAleatoire, 'local');
+        $chemin = $file->storeAs('', $nomAleatoire, $disk);
 
         return [
             'chemin' => $chemin,

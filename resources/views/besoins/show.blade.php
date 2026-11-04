@@ -25,6 +25,12 @@
 
       <p style="font-size:16px;line-height:1.65;margin-bottom:24px">{{ $besoin->description }}</p>
 
+      @if($besoin->photo)
+        <div style="margin-bottom:24px">
+          <img src="{{ asset('storage/' . $besoin->photo) }}" alt="Photo du besoin" style="max-width:100%;border-radius:8px;border:1px solid var(--line)">
+        </div>
+      @endif
+
       <div class="info-row">
         <span class="info-label">Canton</span>
         <span class="info-value">{{ $besoin->canton->nom }}</span>
@@ -44,7 +50,19 @@
       </div>
       <div class="info-row">
         <span class="info-label">Ajouté par</span>
-        <span class="info-value">{{ $besoin->creePar->nom_complet }}</span>
+        <span class="info-value">
+          @if($besoin->creePar)
+            {{ $besoin->creePar->nom_complet }}
+          @else
+            <strong>{{ $besoin->prenom }} {{ $besoin->nom }}</strong>
+            @if($besoin->telephone)
+              <br><a href="tel:{{ $besoin->telephone }}" style="color:inherit;text-decoration:none">
+                <svg class="i" style="width:11px;height:11px;vertical-align:-2px;display:inline"><use href="#i-phone"/></svg>
+                {{ $besoin->telephone }}
+              </a>
+            @endif
+          @endif
+        </span>
       </div>
       <div class="info-row">
         <span class="info-label">Date d'ajout</span>

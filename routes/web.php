@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdministrationController;
+use App\Http\Controllers\BesoinCitoyenController;
 use App\Http\Controllers\BesoinController;
 use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CompteController;
@@ -10,6 +11,8 @@ use App\Http\Controllers\FichierController;
 use App\Http\Controllers\JournalController;
 use App\Http\Controllers\PaiController;
 use App\Http\Controllers\ParametresController;
+use App\Http\Controllers\PlainteCitoyenController;
+use App\Http\Controllers\PlainteController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\UserController;
@@ -31,7 +34,15 @@ Route::middleware(['auth', 'compte.valide'])->group(function () {
     Route::resource('pai', PaiController::class)->parameters(['pai' => 'planPai']);
     Route::resource('budgets', BudgetController::class);
     Route::resource('besoins', BesoinController::class)->parameters(['besoins' => 'besoin']);
+    Route::post('/besoins/{besoin}/valider', [BesoinController::class, 'valider'])->name('besoins.valider');
+    Route::post('/besoins/{besoin}/rejeter', [BesoinController::class, 'rejeter'])->name('besoins.rejeter');
     Route::resource('deliberations', DeliberationController::class);
+
+    Route::get('/plaintes', [PlainteController::class, 'index'])->name('plaintes.index');
+    Route::get('/plaintes/{plainte}', [PlainteController::class, 'show'])->name('plaintes.show');
+    Route::post('/plaintes/{plainte}/valider', [PlainteController::class, 'valider'])->name('plaintes.valider');
+    Route::post('/plaintes/{plainte}/rejeter', [PlainteController::class, 'rejeter'])->name('plaintes.rejeter');
+    Route::delete('/plaintes/{plainte}', [PlainteController::class, 'destroy'])->name('plaintes.destroy');
 
     Route::get('/administration', [AdministrationController::class, 'index'])->name('administration.index');
     Route::post('/administration/documents', [AdministrationController::class, 'storeDocument'])->name('administration.documents.store');
@@ -60,5 +71,12 @@ Route::middleware(['auth', 'compte.valide'])->group(function () {
     Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+// Routes publiques pour les soumissions citoyennes
+Route::get('/besoins-citoyens/create', [BesoinCitoyenController::class, 'create'])->name('besoins-citoyens.create');
+Route::post('/besoins-citoyens', [BesoinCitoyenController::class, 'store'])->name('besoins-citoyens.store');
+
+Route::get('/plaintes-citoyens/create', [PlainteCitoyenController::class, 'create'])->name('plaintes-citoyens.create');
+Route::post('/plaintes-citoyens', [PlainteCitoyenController::class, 'store'])->name('plaintes-citoyens.store');
 
 require __DIR__.'/auth.php';

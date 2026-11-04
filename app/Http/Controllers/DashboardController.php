@@ -17,8 +17,11 @@ class DashboardController extends Controller
         $user = Auth::user();
         $isAdmin = $user->estAdmin();
 
+        $anneeCourante = date('Y');
+
         $stats = [
             'sessions' => SessionTravail::count(),
+            'sessions_annee' => SessionTravail::whereYear('date', $anneeCourante)->count(),
             'sessions_terminees' => SessionTravail::where('statut', 'terminee')->count(),
             'deliberations' => Deliberation::count(),
             'pai' => PlanPai::count(),
@@ -48,6 +51,7 @@ class DashboardController extends Controller
             'stats' => $stats,
             'prochaineSession' => $prochaineSession,
             'derniereSession' => $derniereSession,
+            'anneeCourante' => $anneeCourante,
         ]);
     }
 }

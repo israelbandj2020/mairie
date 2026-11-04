@@ -74,4 +74,22 @@ class SessionTravail extends Model
         }
         return $query;
     }
+
+    public static function genererNumero($date)
+    {
+        $annee = date('Y', strtotime($date));
+        $compteur = self::whereYear('date', $annee)->count() + 1;
+
+        if ($compteur > 4) {
+            throw new \Exception("Le maximum de 4 sessions par année a été atteint pour l'année {$annee}.");
+        }
+
+        return sprintf('%s-%02d', $annee, $compteur);
+    }
+
+    public static function getCompteurAnnee($annee = null)
+    {
+        $annee = $annee ?? date('Y');
+        return self::whereYear('date', $annee)->count();
+    }
 }

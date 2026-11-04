@@ -24,4 +24,11 @@
   <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4"/><path d="M5 4h11l-2 4 2 4H5"/></symbol>
   <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 16V4"/><path d="m7 9 5 5 5-5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></symbol>
   <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 2L2 22h20L12 2Z"/><path d="M12 16v2"/><path d="M12 9v4"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.9v3.3a1.7 1.7 0 0 1-1.8 1.8c-8.7-.5-16.9-4.2-22.9-11.2A1.7 1.7 0 0 1-2.8 8.3v-3.3a1.7 1.7 0 0 1 1.4-1.7l3.4-.5a1.7 1.7 0 0 1 1.7 1l1.5 3.5a1.7 1.7 0 0 1-.5 1.9l-2 1.4a14 14 0 0 0 6.1 6.1l1.4-2a1.7 1.7 0 0 1 1.9-.5l3.5 1.5a1.7 1.7 0 0 1 1 1.7Z"/></symbol>
+  <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+  <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4 20-7Z"/><path d="m22 2-11 11"/></symbol>
+  <symbol id="i-log-out" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></symbol>
 </svg>

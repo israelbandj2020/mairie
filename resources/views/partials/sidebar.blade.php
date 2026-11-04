@@ -36,6 +36,11 @@
       <svg class="i"><use href="#i-pin"/></svg>Besoins prioritaires
     </a>
 
+    <a href="{{ route('plaintes.index') }}"
+       aria-current="{{ request()->is('plaintes*') ? 'page' : null }}">
+      <svg class="i"><use href="#i-alert"/></svg>Plaintes
+    </a>
+
     <div class="nav-label">Documents</div>
 
     <a href="{{ route('pai.index') }}"

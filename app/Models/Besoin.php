@@ -15,6 +15,11 @@ class Besoin extends Model
         'canton_id',
         'titre',
         'description',
+        'nom',
+        'prenom',
+        'telephone',
+        'photo',
+        'statut_validation',
         'priorite',
         'statut',
         'cree_par',
@@ -48,6 +53,26 @@ class Besoin extends Model
             'rejete' => 'Rejeté',
             default => $this->statut,
         };
+    }
+
+    public function getStatutValidationLabelAttribute(): string
+    {
+        return match ($this->statut_validation) {
+            'en_attente' => 'En attente',
+            'valide' => 'Validé',
+            'rejete' => 'Rejeté',
+            default => $this->statut_validation,
+        };
+    }
+
+    public function scopeValides($query)
+    {
+        return $query->where('statut_validation', 'valide');
+    }
+
+    public function scopeEnAttente($query)
+    {
+        return $query->where('statut_validation', 'en_attente');
     }
 
     public function scopeByPriorite($query)

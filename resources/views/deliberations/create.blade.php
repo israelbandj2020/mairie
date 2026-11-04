@@ -21,6 +21,12 @@
           <svg class="i" style="width:16px;height:16px;color:var(--forest-2)"><use href="#i-calendar"/></svg>
           Rattachement
         </div>
+        <div class="field">
+          <label class="field-label">Numéro d'enregistrement</label>
+          <input type="text" name="numero_enregistrement" value="{{ old('numero_enregistrement') }}" required class="f-input"
+                 placeholder="Ex : DEL-2024-001">
+          @error('numero_enregistrement') <p class="field-error">{{ $message }}</p> @enderror
+        </div>
         <div class="field-row">
           <div class="field" style="margin-bottom:0">
             <label class="field-label">Session liée</label>

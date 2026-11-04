@@ -30,6 +30,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if (config('app.env') === 'production') {
+        URL::forceScheme('https');
+    }
         \Carbon\Carbon::setLocale('fr');
 
         Gate::define('gerer', function ($user) {

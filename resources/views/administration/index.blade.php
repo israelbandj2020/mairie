@@ -107,6 +107,10 @@
               <label class="field-label">Poste / Rôle</label>
               <input type="text" name="role" required class="f-input" placeholder="Ex: Maire, Adjoint, Secrétaire…">
             </div>
+            <div class="field">
+              <label class="field-label">Téléphone</label>
+              <input type="text" name="telephone" class="f-input" placeholder="Ex: +228 90 00 00 00">
+            </div>
             <div style="display:flex;gap:8px;margin-top:4px">
               <button type="submit" class="btn-ok" style="height:36px;padding:0 14px;font-size:13.5px">
                 <svg class="i"><use href="#i-check"/></svg>Enregistrer
@@ -124,13 +128,21 @@
 
       <div class="items-list" id="membresList">
         @forelse($membres as $membre)
-          <div class="item-row membre-item" data-search="{{ strtolower($membre->user->nom_complet . ' ' . $membre->role) }}">
+          <div class="item-row membre-item" data-search="{{ strtolower($membre->user->nom_complet . ' ' . $membre->role . ' ' . ($membre->telephone ?? '')) }}">
             <div class="avatar" style="width:42px;height:42px;font-size:14px;background:var(--ok-soft);color:var(--forest-2);border:none;border-radius:50%">
               {{ $membre->user->initiales }}
             </div>
             <div class="item-body">
               <span class="item-title">{{ $membre->user->nom_complet }}</span>
-              <span class="item-meta">{{ $membre->role }}</span>
+              <span class="item-meta">
+                {{ $membre->role }}
+                @if($membre->telephone)
+                  &middot; <a href="tel:{{ $membre->telephone }}" style="color:inherit;text-decoration:none">
+                    <svg class="i" style="width:11px;height:11px;vertical-align:-2px;display:inline"><use href="#i-phone"/></svg>
+                    {{ $membre->telephone }}
+                  </a>
+                @endif
+              </span>
             </div>
             @can('gerer')
               <div class="item-actions">

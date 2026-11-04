@@ -50,6 +50,23 @@
         <p style="text-align: center; margin-top: 24px; font-size: 14px; color: var(--muted);">
             Pas encore de compte ? <a href="{{ route('register') }}" style="color: var(--primary);">S'inscrire</a>
         </p>
+
+        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--line);">
+            <p style="text-align: center; margin-bottom: 12px; font-size: 13px; color: var(--muted);">
+                Citoyen ? Soumettez un besoin pour votre canton
+            </p>
+            <a href="{{ route('besoins-citoyens.create') }}" class="btn-add" style="display: block; width: 100%; text-align: center; text-decoration: none; margin-bottom: 12px;">
+                <svg class="i" style="width: 14px; height: 14px; vertical-align: -2px; margin-right: 6px;"><use href="#i-pin"/></svg>
+                Soumettre un besoin
+            </a>
+            <p style="text-align: center; margin-bottom: 12px; font-size: 13px; color: var(--muted);">
+                Ou déposez une plainte
+            </p>
+            <a href="{{ route('plaintes-citoyens.create') }}" class="btn-add" style="display: block; width: 100%; text-align: center; text-decoration: none;">
+                <svg class="i" style="width: 14px; height: 14px; vertical-align: -2px; margin-right: 6px;"><use href="#i-alert"/></svg>
+                Soumettre une plainte
+            </a>
+        </div>
     </div>
 
     <style>

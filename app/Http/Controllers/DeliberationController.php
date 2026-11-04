@@ -29,6 +29,7 @@ class DeliberationController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'numero_enregistrement' => 'required|string|max:50',
             'session_travail_id' => 'required|exists:sessions_travail,id',
             'titre' => 'required|string|max:255',
             'description' => 'required|string',
@@ -39,6 +40,7 @@ class DeliberationController extends Controller
         $infos = $this->fichierService->enregistrer($validated['fichier'], 'deliberation');
 
         Deliberation::create([
+            'numero_enregistrement' => $validated['numero_enregistrement'],
             'session_travail_id' => $validated['session_travail_id'],
             'titre' => $validated['titre'],
             'description' => $validated['description'],

@@ -10,6 +10,7 @@ class Deliberation extends Model
     use HasFactory;
 
     protected $fillable = [
+        'numero_enregistrement',
         'session_travail_id',
         'titre',
         'description',

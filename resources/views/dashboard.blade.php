@@ -11,17 +11,29 @@
     </div>
   </section>
 
-  {{-- KPIs --}}
-  <div class="kpis">
-    <a class="kpi" href="{{ route('sessions.index') }}" style="--kpi-color:var(--forest-2);--kpi-bg:var(--ok-soft)">
-      <div class="ico" style="background:var(--ok-soft);color:var(--forest-2)">
-        <svg class="i"><use href="#i-gavel"/></svg>
-      </div>
-      <div>
-        <b>{{ $stats['sessions'] }}</b>
-        <span>Sessions</span>
-      </div>
-    </a>
+  {{-- QUICK ACTIONS --}}
+  <div class="quick-grid">
+    @can('gerer')
+      <a class="card" href="{{ route('besoins.create') }}" style="padding:16px;text-decoration:none">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+          <div class="ico" style="background:var(--laterite-soft);color:var(--laterite)">
+            <svg class="i"><use href="#i-pin"/></svg>
+          </div>
+          <b style="color:var(--ink)">Nouveau besoin</b>
+        </div>
+        <p style="font-size:13px;color:var(--muted);margin:0">Enregistrer un besoin prioritaire</p>
+      </a>
+    @else
+      <a class="card" href="{{ route('besoins-citoyens.create') }}" style="padding:16px;text-decoration:none">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+          <div class="ico" style="background:var(--laterite-soft);color:var(--laterite)">
+            <svg class="i"><use href="#i-pin"/></svg>
+          </div>
+          <b style="color:var(--ink)">Soumettre un besoin</b>
+        </div>
+        <p style="font-size:13px;color:var(--muted);margin:0">Exprimer un besoin pour votre canton</p>
+      </a>
+    @endcan
 
     <a class="kpi" href="{{ route('sessions.index') }}">
       <div class="ico" style="background:#ddf2ea;color:var(--ok)">

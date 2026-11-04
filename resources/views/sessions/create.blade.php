@@ -13,22 +13,13 @@
     <form method="POST" action="{{ route('sessions.store') }}">
       @csrf
 
-      <div class="field-row">
-        <div class="field">
-          <label class="field-label">Numéro de session</label>
-          <input type="text" name="numero" value="{{ old('numero') }}" required
-                 class="f-input" placeholder="ex: 2024-01">
-          @error('numero')
-            <p class="field-error">{{ $message }}</p>
-          @enderror
-        </div>
-        <div class="field">
-          <label class="field-label">Date</label>
-          <input type="date" name="date" value="{{ old('date') }}" required class="f-input">
-          @error('date')
-            <p class="field-error">{{ $message }}</p>
-          @enderror
-        </div>
+      <div class="field">
+        <label class="field-label">Date</label>
+        <input type="date" name="date" value="{{ old('date') }}" required class="f-input">
+        <p class="field-hint">Le numéro de session sera généré automatiquement (format: AAAA-01)</p>
+        @error('date')
+          <p class="field-error">{{ $message }}</p>
+        @enderror
       </div>
 
       <div class="field">

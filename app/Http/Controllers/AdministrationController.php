@@ -57,6 +57,7 @@ class AdministrationController extends Controller
             'nom' => 'required|string|max:255',
             'prenom' => 'required|string|max:255',
             'role' => 'required|string|max:255',
+            'telephone' => 'nullable|string|max:20',
         ]);
 
         $user = User::create([
@@ -73,6 +74,7 @@ class AdministrationController extends Controller
         MembreBureau::create([
             'user_id' => $user->id,
             'role' => $validated['role'],
+            'telephone' => $validated['telephone'],
             'ordre' => $maxOrdre + 1,
         ]);
 
