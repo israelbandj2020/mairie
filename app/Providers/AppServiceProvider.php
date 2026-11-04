@@ -14,6 +14,7 @@ use App\Observers\PlanPaiObserver;
 use App\Observers\SessionDocumentObserver;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
